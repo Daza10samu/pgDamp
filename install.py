@@ -37,7 +37,7 @@ if Path("/opt/pgData/venv").exists():
 run_command("python -m venv /opt/pgData/venv; . /opt/pgData/venv/bin/activate; pip install requirements.txx")
 
 run_command("cp -r src/* /opt/pgData/")
-run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.yml.sample'} /opt/pgData/config.yml")
+run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.sample.yml'} /opt/pgData/config.yml")
 
 run_command("chown -R pgData:pgData /opt/pgData/")
 
