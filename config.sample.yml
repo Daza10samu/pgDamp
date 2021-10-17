@@ -6,3 +6,4 @@ main:
   db_pass: psql
   bot_token: ""
   chats: []
+  timeout: 3600
