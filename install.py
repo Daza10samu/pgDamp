@@ -26,7 +26,7 @@ if not Path("/opt/pgDump/").exists():
     mkdir("/opt/pgDump/")
 
 run_command("groupadd -f pgDump")
-if system("id -u pgDump") == 1:
+if system("id -u pgDump") == 256:
     run_command("useradd -g pgDump -G docker -b /opt/pgDump/ pgDump")
 
 uid = int(popen("id -u pgDump").read())
