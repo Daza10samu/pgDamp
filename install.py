@@ -29,23 +29,23 @@ run_command("groupadd -f pgDump")
 if system("id -u pgDump") != 1:
     run_command("useradd -g pgDump -b /opt/pgDump/ pgDump")
 
-uid = int(popen("id -u pgData").read())
-gid = int(popen("id -g pgData").read())
+uid = int(popen("id -u pgDump").read())
+gid = int(popen("id -g pgDump").read())
 
-if Path("/opt/pgData/venv").exists():
-    run_command("rm -r /opt/pgData/venv")
-run_command("python -m venv /opt/pgData/venv; . /opt/pgData/venv/bin/activate; pip install requirements.txx")
+if Path("/opt/pgDump/venv").exists():
+    run_command("rm -r /opt/pgDump/venv")
+run_command("python -m venv /opt/pgDump/venv; . /opt/pgDump/venv/bin/activate; pip install requirements.txx")
 
-run_command("cp -r src/* /opt/pgData/")
-run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.sample.yml'} /opt/pgData/config.yml")
+run_command("cp -r src/* /opt/pgDump/")
+run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.sample.yml'} /opt/pgDump/config.yml")
 
-run_command("chown -R pgData:pgData /opt/pgData/")
+run_command("chown -R pgDump:pgDump /opt/pgDump/")
 
 setgid(gid)
 setuid(uid)
 
-run_command("crontab -l > /opt/pgData/mycron")
-with Path("/opt/pgData/mycron").open("a") as file:
-    file.write("00 20 * * * /opt/pgData/venv/bin/python /opt/pgData/main.py")
-run_command("crontab /opt/pgData/mycron")
-run_command("rm /opt/pgData/mycron")
+run_command("crontab -l > /opt/pgDump/mycron")
+with Path("/opt/pgDump/mycron").open("a") as file:
+    file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py")
+run_command("crontab /opt/pgDump/mycron")
+run_command("rm /opt/pgDump/mycron")
