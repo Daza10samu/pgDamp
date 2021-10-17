@@ -11,9 +11,9 @@ with Path("config.yml").open() as stream:
 bot = TeleBot(config["main"]["bot_token"])
 
 system(
-    f"PGPASSWORD={config['main']['db_pass']} PGPORT={config['main']['db_port']} PGHOSTADDR={config['main']['db_host']}"
-    f" pg_dump -U {config['main']['db_user']}"
-    f"  --dbname=postgres --file='dump.sql' --create"
+    f"docker exec {config['main']['docker_container']}"
+    f" pg_dump -U {config['main']['db_name']}"
+    f" --create > dump.sql"
 )
 
 for chat in config["main"]["chats"]:

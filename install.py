@@ -14,10 +14,10 @@ if getuid() != 0:
 
 if Path("/etc/debian_version").exists():
     # Ubuntu/Debian
-    run_command("apt install -y postgresql-client")
+    run_command("apt install -y postgresql-client cron python3-venv")
 elif Path("/etc/system-release").exists():
     # CentOS
-    run_command("dnf install -y postgresql-client")
+    run_command("dnf install -y postgresql-client crontabs")
 else:
     print("Your OS is not supported")
     exit(1)
@@ -26,7 +26,7 @@ if not Path("/opt/pgDump/").exists():
     mkdir("/opt/pgDump/")
 
 run_command("groupadd -f pgDump")
-if system("id -u pgDump") != 1:
+if system("id -u pgDump") == 1:
     run_command("useradd -g pgDump -b /opt/pgDump/ pgDump")
 
 uid = int(popen("id -u pgDump").read())
@@ -34,7 +34,7 @@ gid = int(popen("id -g pgDump").read())
 
 if Path("/opt/pgDump/venv").exists():
     run_command("rm -r /opt/pgDump/venv")
-run_command("python -m venv /opt/pgDump/venv; . /opt/pgDump/venv/bin/activate; pip install requirements.txx")
+run_command("python3 -m venv /opt/pgDump/venv; . /opt/pgDump/venv/bin/activate; pip install -r requirements.txt")
 
 run_command("cp -r src/* /opt/pgDump/")
 run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.sample.yml'} /opt/pgDump/config.yml")
@@ -44,8 +44,8 @@ run_command("chown -R pgDump:pgDump /opt/pgDump/")
 setgid(gid)
 setuid(uid)
 
-run_command("crontab -l > /opt/pgDump/mycron")
+system("crontab -l > /opt/pgDump/mycron")
 with Path("/opt/pgDump/mycron").open("a") as file:
-    file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py")
+    file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
 run_command("crontab /opt/pgDump/mycron")
 run_command("rm /opt/pgDump/mycron")
