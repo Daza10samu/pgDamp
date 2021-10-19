@@ -42,10 +42,14 @@ run_command("python3 -m venv /opt/pgDump/venv; . /opt/pgDump/venv/bin/activate; 
 run_command("cp -r src/* /opt/pgDump/")
 run_command(f"cp {'config.yml' if Path('config.yml').exists() else 'config.sample.yml'} /opt/pgDump/config.yml")
 
-system("crontab -l > /opt/pgData/mycron")
-with Path("/opt/pgDump/mycron").open("r") as f:
-    if "pgDump" not in f.read():
-        with Path("/opt/pgDump/mycron").open("a") as file:
-            file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
+system("crontab -l > /opt/pgDump/mycron")
+try:
+    with Path("/opt/pgDump/mycron").open("r") as f:
+        if "pgDump" not in f.read():
+            with Path("/opt/pgDump/mycron").open("a") as file:
+                file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
+except FileNotFoundError:
+    with Path("/opt/pgDump/mycron").open("a") as file:
+        file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
 run_command("crontab /opt/pgDump/mycron")
 run_command("rm /opt/pgDump/mycron")
