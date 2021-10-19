@@ -14,10 +14,10 @@ if getuid() != 0:
 
 if Path("/etc/debian_version").exists():
     # Ubuntu/Debian
-    run_command("apt install -y postgresql-client cron python3-venv")
+    run_command("apt install -y cron python3-venv")
 elif Path("/etc/system-release").exists():
     # CentOS
-    run_command("dnf install -y postgresql-client crontabs")
+    run_command("dnf install -y crontabs")
 else:
     print("Your OS is not supported")
     exit(1)
@@ -44,8 +44,7 @@ run_command("chown -R pgDump:pgDump /opt/pgDump/")
 setgid(gid)
 setuid(uid)
 
-system("crontab -l > /opt/pgDump/mycron")
-with Path("/opt/pgDump/mycron").open("a") as file:
+with Path("/opt/pgDump/mycron").open("w") as file:
     file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
 run_command("crontab /opt/pgDump/mycron")
 run_command("rm /opt/pgDump/mycron")
