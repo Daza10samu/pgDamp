@@ -14,10 +14,10 @@ if getuid() != 0:
 
 if Path("/etc/debian_version").exists():
     # Ubuntu/Debian
-    run_command("apt install -y postgresql-client cron python3-venv")
+    run_command("apt install -y cron python3-venv")
 elif Path("/etc/system-release").exists():
     # CentOS
-    run_command("dnf install -y postgresql crontabs")
+    run_command("dnf install -y crontabs")
 else:
     print("Your OS is not supported")
     exit(1)
