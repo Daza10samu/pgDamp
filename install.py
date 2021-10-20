@@ -49,7 +49,7 @@ try:
     with Path("/opt/pgDump/mycron").open("r") as f:
         if "pgDump" not in f.read():
             with Path("/opt/pgDump/mycron").open("a") as file:
-                file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py >/opt/pgDump/log 2>&1\n")
+                file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py >>/opt/pgDump/log 2>&1\n")
 except FileNotFoundError:
     with Path("/opt/pgDump/mycron").open("a") as file:
         file.write("00 20 * * * /opt/pgDump/venv/bin/python /opt/pgDump/main.py\n")
