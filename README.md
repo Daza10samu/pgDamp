@@ -9,7 +9,7 @@ User id you can see in t.me/jsondumpbot
 
 You can edit existing config thad located in /opt/pgDump/config.yml
 
-Logs located in /opt/pgDump/config.yml
+Logs located in /opt/pgDump/log
 
 
 Get app_id and app_hash on  my.telegram.org
