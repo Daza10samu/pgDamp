@@ -2,5 +2,7 @@ main:
   db_name: "postgres"
   docker_container: psql_container
   bot_token: ""
+  api_hash: asdsadad
+  api_id: 123
   chats: []
   timeout: 3600
